@@ -49,8 +49,8 @@ export const GET = createZodRoute()
   .params(paramsSchema)
   .query(querySchema)
   .body(bodySchema)
-  .handler((request, context) => {
-    const { id } = context.params;
+  .handler(async (request, context) => {
+    const { id } = await context.params; // Since Next.js 15 the params are now a promise
     const { search } = context.query;
     const { field } = context.body;
 
@@ -72,7 +72,7 @@ To define a route handler in Next.js:
 You can add middleware to your route handler with the `use` method.
 
 ```ts
-const safeRoute = createSafeRoute()
+const safeRoute = createZodRoute()
   .use(async (request, context) => {
     return { user: { id: 'user-123', role: 'admin' } };
   })
@@ -90,27 +90,37 @@ You can specify a custom error handler function with the `handleServerError` met
 
 To achieve this, define a custom error handler when creating the `safeRoute`:
 
+- Create a custom error class that extends `Error` and a `safeRoute` instance with a custom error handler:
+
 ```ts
-class CustomError extends Error {
-  constructor(message: string) {
+import { createZodRoute } from 'next-zod-route';
+import { NextResponse } from 'next/server';
+
+export class RouteError extends Error {
+  status?: number;
+  constructor(message: string, status?: number) {
     super(message);
-    this.name = 'CustomError';
+    this.name = 'RouteError';
+    this.message = message;
+    this.status = status || 400;
   }
 }
 
-const safeRoute = createSafeRoute({
+export const saferoute = createZodRoute({
   handleServerError: (error: Error) => {
-    if (error instanceof CustomError) {
-      return new Response(JSON.stringify({ message: error.name, details: error.message }), { status: 400 });
-    }
+    if (error instanceof RouteError) return NextResponse.json({ message: error.message }, { status: error.status });
 
-    return new Response(JSON.stringify({ message: 'Something went wrong' }), { status: 400 });
+    return NextResponse.json({ message: 'Something went wrong' }, { status: 400 });
   },
 });
+```
 
+- Use the `handleServerError` method to define a custom error handler.:
+
+```ts
 const GET = safeRoute.handler((request, context) => {
-  // This error will be handled by the custom error handler
-  throw new CustomError('Test error');
+  // This error will be handled by the custom error handler with a 500 status code
+  throw new RouteError('Test error', 500);
 });
 ```
 
