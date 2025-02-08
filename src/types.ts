@@ -3,7 +3,7 @@ import { Schema } from 'zod';
 
 export type HandlerFunction<TParams, TQuery, TBody, TContext> = (
   request: Request,
-  context: { params: TParams; query: TQuery; body: TBody; data: TContext },
+  context: { params: Promise<TParams>; query: TQuery; body: TBody; data: TContext },
 ) => any;
 
 export interface RouteHandlerBuilderConfig {
@@ -12,6 +12,6 @@ export interface RouteHandlerBuilderConfig {
   bodySchema: Schema;
 }
 
-export type OriginalRouteHandler = (request: Request, context?: { params: Promise<Record<string, unknown>> }) => any;
+export type OriginalRouteHandler = (request: Request, context: { params: Promise<Record<string, unknown>> }) => any;
 
 export type HandlerServerErrorFn = (error: Error) => Response;
