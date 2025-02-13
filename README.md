@@ -1,14 +1,12 @@
-<h1 align="center">next-zod-route</h1>
+<h1 align="center">next-safe-api</h1>
 
-A fork from [next-safe-route](https://github.com/richardsolomou/next-safe-route) that uses [zod](https://github.com/colinhacks/zod) instead of [typeschema](https://github.com/typeschema/main).
+A fork from [next-zod-route](https://github.com/Melvynx/next-zod-route) from fork from [next-safe-route](https://github.com/richardsolomou/next-safe-route) that uses [zod](https://github.com/colinhacks/zod) instead of [typeschema](https://github.com/typeschema/main), and now supports Next.js 15.
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/next-zod-route"><img src="https://img.shields.io/npm/v/next-zod-route?style=for-the-badge&logo=npm" /></a>
-  <a href="https://github.com/melvynxdev/next-zod-route/actions/workflows/test.yaml"><img src="https://img.shields.io/github/actions/workflow/status/melvynxdev/next-zod-route/test.yaml?style=for-the-badge&logo=vitest" /></a>
-  <a href="https://github.com/melvynxdev/next-zod-route/blob/main/LICENSE"><img src="https://img.shields.io/npm/l/next-zod-route?style=for-the-badge" /></a>
-</p>
+[![NPM](https://img.shields.io/npm/v/next-safe-api?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/next-safe-api)
+[![Release](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml/badge.svg)](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml)
+[![Test](https://github.com/StephanJ98/next-safe-api/actions/workflows/test.yaml/badge.svg)](https://github.com/StephanJ98/next-safe-api/actions/workflows/test.yaml)
 
-`next-zod-route` is a utility library for Next.js that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.
+`next-safe-api` is a utility library for Next.js 15 that provides type-safety and schema validation for [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers)/API Routes.
 
 ## Features
 
@@ -21,7 +19,7 @@ A fork from [next-safe-route](https://github.com/richardsolomou/next-safe-route)
 ## Installation
 
 ```sh
-npm install next-zod-route
+npm install next-safe-api
 ```
 
 The library only works with [zod](https://zod.dev) for schema validation.
@@ -30,7 +28,7 @@ The library only works with [zod](https://zod.dev) for schema validation.
 
 ```ts
 // app/api/hello/route.ts
-import { createZodRoute } from 'next-zod-route';
+import { createSafeApi } from 'next-safe-api';
 import { z } from 'zod';
 
 const paramsSchema = z.object({
@@ -45,7 +43,7 @@ const bodySchema = z.object({
   field: z.string(),
 });
 
-export const GET = createZodRoute()
+export const GET = createSafeApi()
   .params(paramsSchema)
   .query(querySchema)
   .body(bodySchema)
@@ -60,9 +58,9 @@ export const GET = createZodRoute()
 
 To define a route handler in Next.js:
 
-1. Import `createZodRoute` and your validation library (default, `zod`).
+1. Import `createSafeApi` and your validation library (default, `zod`).
 2. Define validation schemas for params, query, and body as needed.
-3. Use `createZodRoute()` to create a route handler, chaining `params`, `query`, and `body` methods.
+3. Use `createSafeApi()` to create a route handler, chaining `params`, `query`, and `body` methods.
 4. Implement your handler function, accessing validated and type-safe params, query, and body through `context`.
 
 ## Advanced Usage
@@ -72,7 +70,7 @@ To define a route handler in Next.js:
 You can add middleware to your route handler with the `use` method.
 
 ```ts
-const safeRoute = createZodRoute()
+const safeRoute = createSafeApi()
   .use(async (request, context) => {
     return { user: { id: 'user-123', role: 'admin' } };
   })
@@ -93,7 +91,7 @@ To achieve this, define a custom error handler when creating the `safeRoute`:
 - Create a custom error class that extends `Error` and a `safeRoute` instance with a custom error handler:
 
 ```ts
-import { createZodRoute } from 'next-zod-route';
+import { createSafeApi } from 'next-safe-api';
 import { NextResponse } from 'next/server';
 
 export class RouteError extends Error {
@@ -106,7 +104,7 @@ export class RouteError extends Error {
   }
 }
 
-export const saferoute = createZodRoute({
+export const saferoute = createSafeApi({
   handleServerError: (error: Error) => {
     if (error instanceof RouteError) return NextResponse.json({ message: error.message }, { status: error.status });
 
