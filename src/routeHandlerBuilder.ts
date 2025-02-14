@@ -121,7 +121,7 @@ export class RouteHandlerBuilder<
         const url = new URL(request.url);
         let params = context?.params ? await context.params : {};
         let query = Object.fromEntries(url.searchParams.entries());
-        let body = request.method !== 'GET' ? await request.json() : {};
+        let body = request.method !== 'GET' && request.method !== 'DELETE' ? await request.json() : {};
 
         // Validate the params against the provided schema
         if (this.config.paramsSchema) {
