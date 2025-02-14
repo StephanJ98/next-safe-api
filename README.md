@@ -1,6 +1,7 @@
 <h1 align="center">next-safe-api</h1>
 
-A fork from [next-zod-route](https://github.com/Melvynx/next-zod-route) from fork from [next-safe-route](https://github.com/richardsolomou/next-safe-route) that uses [zod](https://github.com/colinhacks/zod) instead of [typeschema](https://github.com/typeschema/main), and now supports Next.js 15.
+A fork of [next-zod-route](https://github.com/Melvynx/next-zod-route), which itself is a fork of [next-safe-route](https://github.com/richardsolomou/next-safe-route). This version utilizes [zod](https://github.com/colinhacks/zod) instead of [typeschema](https://github.com/typeschema/main) and now supports Next.js 15.
+
 
 [![NPM](https://img.shields.io/npm/v/next-safe-api?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/next-safe-api)
 [![Release](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml/badge.svg)](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml)
