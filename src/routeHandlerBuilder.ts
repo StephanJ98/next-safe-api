@@ -121,7 +121,21 @@ export class RouteHandlerBuilder<
         const url = new URL(request.url);
         let params = context?.params ? await context.params : {};
         let query = Object.fromEntries(url.searchParams.entries());
-        let body = request.method !== 'GET' && request.method !== 'DELETE' ? await request.json() : {};
+
+        // Support both JSON and FormData parsing
+        let body: unknown = {};
+        if (request.method !== 'GET' && request.method !== 'DELETE') {
+          const contentType = request.headers.get('content-type') || '';
+          if (
+            contentType.includes('multipart/form-data') ||
+            contentType.includes('application/x-www-form-urlencoded')
+          ) {
+            const formData = await request.formData();
+            body = Object.fromEntries(formData.entries());
+          } else {
+            body = await request.json();
+          }
+        }
 
         // Validate the params against the provided schema
         if (this.config.paramsSchema) {
