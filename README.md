@@ -2,7 +2,6 @@
 
 A fork of [next-zod-route](https://github.com/Melvynx/next-zod-route), which itself is a fork of [next-safe-route](https://github.com/richardsolomou/next-safe-route). This version utilizes [zod](https://github.com/colinhacks/zod) instead of [typeschema](https://github.com/typeschema/main) and now supports Next.js 15.
 
-
 [![NPM](https://img.shields.io/npm/v/next-safe-api?style=for-the-badge&logo=npm)](https://www.npmjs.com/package/next-safe-api)
 [![Release](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml/badge.svg)](https://github.com/StephanJ98/next-safe-api/actions/workflows/release.yaml)
 [![Test](https://github.com/StephanJ98/next-safe-api/actions/workflows/test.yaml/badge.svg)](https://github.com/StephanJ98/next-safe-api/actions/workflows/test.yaml)
@@ -63,6 +62,16 @@ To define a route handler in Next.js:
 2. Define validation schemas for params, query, and body as needed.
 3. Use `createSafeApi()` to create a route handler, chaining `params`, `query`, and `body` methods.
 4. Implement your handler function, accessing validated and type-safe params, query, and body through `context`.
+
+## Supported Body Formats
+
+`next-safe-api` supports multiple request body formats out of the box:
+
+- **JSON:** Automatically parses and validates JSON bodies.
+- **URL Encoded:** Supports `application/x-www-form-urlencoded` data.
+- **Multipart:** Supports `multipart/form-data`, enabling file uploads and complex form data parsing.
+
+Simply define the appropriate schema using [zod](https://zod.dev) ( _or [zod-form-data](https://www.npmjs.com/package/zod-form-data) for specific uses_ ) and attach it using the `.body()` method to enable type-safe parsing for your route handler.
 
 ## Advanced Usage
 
